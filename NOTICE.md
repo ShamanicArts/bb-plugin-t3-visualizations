@@ -22,6 +22,11 @@ The upstream code is copyright 2026 T3 Tools Inc. and licensed under MIT. Its
 copyright and permission notice are retained in `LICENSE` and source headers.
 
 The BB-specific integration is maintained by ShamanicArts and is also MIT
-licensed. It connects the upstream HTML bootstrap to BB's existing inline and
-pinned widgets, thread storage, CLI, agent tools, and live theme. This repository
-is an independent adaptation, not an official T3 Code distribution.
+licensed. BB already supports interactive HTML replies. This adaptation brings
+Ben Davis's T3 Code widget styling and authoring approach, theme palettes,
+guidance, and live theme integration to that existing capability.
+
+Pinned Widgets is a separate plugin we added to BB; it is not included by
+default. This integration requires that plugin for its widget controls and
+pinning, and uses BB's existing thread storage. This repository is an
+independent adaptation, not an official T3 Code distribution.

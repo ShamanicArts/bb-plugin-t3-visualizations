@@ -12,7 +12,7 @@ export const renderSchema = z.object({
   pin: z.boolean().default(false),
 });
 export const renderInstructions =
-  "Build self-contained interactive HTML with inline CSS/JavaScript. Preview using BB's existing browser tooling, then publish with t3_html_render or bb t3-visualizations render. Emit the returned ::widget directive as its own block in your reply. It uses Pinned Widgets' existing resize, expand, and Pin to bar controls. Prefer data URLs for local images, or remote HTTPS assets. Use a fluid width, no outer banner/card, fixed chart heights, and content-driven page height (avoid 100vh). Theme variables follow BB live. Pin only when the user asks to keep the visualization above the composer.";
+  "BB already supports interactive HTML replies. This plugin adapts Ben Davis's T3 Code widget styles and authoring approach to that existing capability. Pinned Widgets is a separate required plugin, not a BB default. Build self-contained interactive HTML with inline CSS/JavaScript. Preview using BB's existing browser tooling, then publish with t3_html_render or bb t3-visualizations render. Emit the returned ::widget directive as its own block in your reply. The separate Pinned Widgets plugin provides resize, expand, and Pin to bar controls. Prefer data URLs for local images, or remote HTTPS assets. Use a fluid width, no outer banner/card, fixed chart heights, and content-driven page height (avoid 100vh). Theme variables follow BB live. Pin only when the user asks to keep the visualization above the composer.";
 
 export default function plugin(bb: BbPluginApi) {
   async function publish(threadId: string, input: z.infer<typeof renderSchema>, signal?: AbortSignal) {
@@ -39,7 +39,7 @@ export default function plugin(bb: BbPluginApi) {
   }
   bb.agents.registerTool({
     name: "t3_html_render",
-    description: `Publish interactive HTML into BB's existing inline widget and optionally pin the same page above the composer. ${HTML_RENDER_THEME_GUIDE.replaceAll("T3", "BB")}`,
+    description: `Apply Ben Davis's T3 Code widget styling to BB's existing interactive HTML replies. Integrates with the separate Pinned Widgets plugin for widget controls and optional pinning. ${HTML_RENDER_THEME_GUIDE.replaceAll("T3", "BB")}`,
     instructions: renderInstructions, parameters: renderSchema,
     presentation: { label: { pending: "Publishing visualization", completed: "Published visualization" }, icon: { glyph: "ChartNoAxesCombined" } },
     execute: (input, ctx) => publish(ctx.threadId, input, ctx.signal),

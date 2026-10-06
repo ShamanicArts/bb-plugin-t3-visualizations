@@ -1,17 +1,20 @@
 # T3 Visualizations for BB
 
-Interactive HTML visual replies for [BB](https://getbb.app), using its existing
-Pinned Widgets infrastructure for inline rendering, resizing, expansion, and
-pinning above the composer.
+Ben Davis's T3 Code widget styles and authoring approach, adapted for
+[BB](https://getbb.app)'s existing interactive HTML replies. BB already supports
+interactive HTML; this plugin contributes presentation styles, palettes,
+authoring guidance, and live theme integration.
 
-Based on the original inline HTML visualization feature by **[Ben Davis
+Based on the original T3 Code work by **[Ben Davis
 (@bmdavis419)](https://github.com/bmdavis419)** in
 [T3 Code PR #15916](https://github.com/pingdotgg/t3code/pull/15916).
 This is an independent BB integration, released under the [MIT license](LICENSE).
 
 ## Install
 
-Enable BB's Pinned Widgets plugin, then install:
+This integration requires **Pinned Widgets**, a separate plugin we added to BB.
+It is not included in BB by default. Install and enable that plugin separately,
+then install T3 Visualizations:
 
 ```sh
 bb plugin install https://github.com/ShamanicArts/bb-plugin-t3-visualizations
@@ -71,7 +74,9 @@ This plugin adapts the HTML bootstrap, theme protocol, reference helpers,
 default palette subset, and relevant tests from
 [T3 Code at `99db70cf1a1f24deca80e40a94a6cdbbaf511da6`](https://github.com/pingdotgg/t3code/tree/99db70cf1a1f24deca80e40a94a6cdbbaf511da6).
 
-The BB adaptation adds a theme request handshake, a native agent tool, and a CLI,
-and reuses BB's storage and widget controls. See [NOTICE.md](NOTICE.md) for exact
+The BB adaptation supplies styling and authoring guidance, a theme request
+handshake, a native agent tool, and a CLI. It uses BB's existing HTML capability
+and thread storage, and the separately installed Pinned Widgets plugin's widget
+controls. See [NOTICE.md](NOTICE.md) for exact
 source attribution. The upstream copyright and MIT permission notice are
 retained in [LICENSE](LICENSE).

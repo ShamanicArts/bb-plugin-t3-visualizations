@@ -8,7 +8,7 @@
   },
   "bb": {
     "name": "T3 Visualizations",
-    "description": "T3-style themed HTML visualizations using BB inline widgets and pins.",
+    "description": "Ben Davis's T3 Code widget styles and authoring approach for BB's existing HTML replies; integrates with the separate Pinned Widgets plugin.",
     "branding": {
       "icon": "ChartNoAxesCombined"
     },

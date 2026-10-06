@@ -1,10 +1,16 @@
 ---
 name: t3-visualizations
-description: Create T3-style interactive visual replies in BB using the existing inline widget and pinned widget infrastructure.
+description: Apply Ben Davis's T3 Code widget styles and authoring approach to BB's existing interactive HTML replies, integrating with the separate Pinned Widgets plugin.
 ---
 
 Use when a chart, interactive diagram, table, collage, or small simulation
 communicates more clearly than prose.
+
+BB already supports interactive HTML replies. This plugin brings Ben Davis's
+T3 Code widget styles, palettes, authoring approach, and live theme integration
+to that capability. Pinned Widgets is a separately installed plugin, not a BB
+default; this integration requires it. Preserve these distinctions when
+describing the plugin.
 
 1. Build self-contained HTML with inline CSS and JavaScript. Embed local
    images as data URLs or use remote HTTPS assets. Stay under 512,000 characters.
@@ -23,7 +29,7 @@ communicates more clearly than prose.
    ```
 
 6. Emit the returned `::widget{...}` directive as its own block in the reply.
-   Pinned Widgets provides resize, expand, and **Pin to bar** on the same page.
+   The separate Pinned Widgets plugin provides resize, expand, and **Pin to bar** on the same page.
    Use `pin: true` or `--pin` when the user asks to keep it above the composer.
 
 Heights are 120–1200 pixels, default 640. Existing widgets remember user
