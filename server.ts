@@ -12,7 +12,7 @@ export const renderSchema = z.object({
   pin: z.boolean().default(false),
 });
 export const renderInstructions =
-  "BB already supports interactive HTML replies. This plugin adapts Ben Davis's T3 Code widget styles and authoring approach to that existing capability. Pinned Widgets is a separate required plugin, not a BB default. Build self-contained interactive HTML with inline CSS/JavaScript. Preview using BB's existing browser tooling, then publish with t3_html_render or bb t3-visualizations render. Emit the returned ::widget directive as its own block in your reply. The separate Pinned Widgets plugin provides resize, expand, and Pin to bar controls. Prefer data URLs for local images, or remote HTTPS assets. Use a fluid width, no outer banner/card, fixed chart heights, and content-driven page height (avoid 100vh). Theme variables follow BB live. Pin only when the user asks to keep the visualization above the composer.";
+  "BB already supports interactive HTML replies. This plugin adapts Ben Davis's T3 Code widget styles and authoring approach to that existing capability. Build self-contained interactive HTML with inline CSS/JavaScript. Preview using BB's existing browser tooling, then publish with t3_html_render or bb t3-visualizations render. Emit the returned ::inline-vis directive as its own block in your reply. Publishing and live themes work without Pinned Widgets. Optional pinning works alongside the separate Pinned Widgets plugin: https://github.com/ShamanicArts/bb-plugin-pinned-widgets . Prefer data URLs for local images, or remote HTTPS assets. Use a fluid width, no outer banner/card, fixed chart heights, and content-driven page height (avoid 100vh). Theme variables follow BB live. Pin only when the user asks to keep the visualization above the composer.";
 
 export default function plugin(bb: BbPluginApi) {
   async function publish(threadId: string, input: z.infer<typeof renderSchema>, signal?: AbortSignal) {
@@ -23,7 +23,7 @@ export default function plugin(bb: BbPluginApi) {
       path: path.join(storage.storageRootPath, file),
       content: injectHtmlRenderBootstrap(input.html), createParents: true,
     });
-    const directive = `::widget{file="${file}" label=${JSON.stringify(input.title)} height="${input.height}"}`;
+    const directive = `::inline-vis{source="thread-storage" file="${file}" height="${input.height}"}`;
     if (input.pin) {
       try {
         await bb.sdk.plugins.callRpc({
@@ -32,20 +32,20 @@ export default function plugin(bb: BbPluginApi) {
           outputSchema: z.object({ id: z.string() }).passthrough(), signal,
         });
       } catch (error) {
-        return `${directive}\n\nPublished, but could not pin: ${error instanceof Error ? error.message : String(error)}. Use the widget's Pin to bar control to retry.`;
+        return `${directive}\n\nPublished inline. Optional pinning unavailable: ${error instanceof Error ? error.message : String(error)}. Pinning works alongside https://github.com/ShamanicArts/bb-plugin-pinned-widgets .`;
       }
     }
     return `${directive}\n\n${input.pin ? "Pinned above the composer. " : ""}Emit the directive as its own block in your reply.`;
   }
   bb.agents.registerTool({
     name: "t3_html_render",
-    description: `Apply Ben Davis's T3 Code widget styling to BB's existing interactive HTML replies. Integrates with the separate Pinned Widgets plugin for widget controls and optional pinning. ${HTML_RENDER_THEME_GUIDE.replaceAll("T3", "BB")}`,
+    description: `Apply Ben Davis's T3 Code widget styling to BB's existing interactive HTML replies. Publishes through BB's inline-vis renderer with live theme updates. Pinning is optional. ${HTML_RENDER_THEME_GUIDE.replaceAll("T3", "BB")}`,
     instructions: renderInstructions, parameters: renderSchema,
     presentation: { label: { pending: "Publishing visualization", completed: "Published visualization" }, icon: { glyph: "ChartNoAxesCombined" } },
     execute: (input, ctx) => publish(ctx.threadId, input, ctx.signal),
   });
   bb.cli.register({
-    name: "t3-visualizations", summary: "Publish themed HTML using BB inline widgets and pins",
+    name: "t3-visualizations", summary: "Publish themed HTML using BB's inline previews; optionally pin",
     commands: [{ name: "render", summary: "Publish an HTML file from this thread's workspace", usage: "bb t3-visualizations render <file.html> --title <title> [--height 120-1200] [--pin]" }],
     async run(argv, ctx) {
       try {

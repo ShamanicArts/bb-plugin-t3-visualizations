@@ -26,7 +26,9 @@ licensed. BB already supports interactive HTML replies. This adaptation brings
 Ben Davis's T3 Code widget styling and authoring approach, theme palettes,
 guidance, and live theme integration to that existing capability.
 
-Pinned Widgets is a separate plugin we added to BB; it is not included by
-default. This integration requires that plugin for its widget controls and
-pinning, and uses BB's existing thread storage. This repository is an
-independent adaptation, not an official T3 Code distribution.
+Inline rendering uses BB's existing `inline-vis` preview and thread storage.
+Publishing and live theme updates work independently of pinning. Optional
+pinning works alongside the separate
+[Pinned Widgets plugin](https://github.com/ShamanicArts/bb-plugin-pinned-widgets);
+it is not a dependency. This repository is an independent adaptation, not an
+official T3 Code distribution.

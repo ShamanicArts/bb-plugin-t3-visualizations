@@ -17,11 +17,12 @@ function host(pinFails = false) {
 }
 
 describe("BB widget integration", () => {
-  it("publishes through the thread's host and returns the existing widget directive", async () => {
-    const harness = host();
+  it("publishes through BB inline-vis when Pinned Widgets is absent, without contacting it", async () => {
+    const harness = host(true);
     const result = await harness.behavior.callAgentTool("t3_html_render", { html: "<p>interactive chart</p>", title: "Chart" }, { threadId: "thread-1" });
-    expect(result).toContain('::widget{file="visualizations/t3-');
-    expect(result).toContain('label="Chart" height="640"}');
+    expect(result).toContain('::inline-vis{source="thread-storage" file="visualizations/t3-');
+    expect(result).toContain('height="640"}');
+    expect(result).not.toContain('::widget');
     const writes = harness.inspection.sdk.callsTo("files.write");
     expect(writes).toHaveLength(1);
     expect(writes[0]![0]).toMatchObject({ hostId: "remote-host", rootPath: "/remote/thread-storage", createParents: true });
@@ -37,11 +38,20 @@ describe("BB widget integration", () => {
     const file = /file="([^"]+)"/.exec(String(result))![1];
     expect(JSON.stringify(call)).toContain(file);
   });
-  it("keeps the published directive and reports a failed pin honestly", async () => {
+  it("keeps a working BB inline preview when optional pinning is unavailable", async () => {
     const result = await host(true).behavior.callAgentTool("t3_html_render", { html: "<p>Chart</p>", title: "Chart", pin: true });
-    expect(result).toContain("::widget{");
-    expect(result).toContain("could not pin: Pinned Widgets disabled");
+    expect(result).toContain('::inline-vis{source="thread-storage"');
+    expect(result).toContain("Published inline. Optional pinning unavailable: Pinned Widgets disabled");
     expect(result).not.toContain("Pinned above the composer.");
+  });
+  it("publishes from the CLI without Pinned Widgets", async () => {
+    const harness = host(true);
+    harness.inspection.sdk.stub("threads.get", async () => ({ environment: { path: "/workspace", hostId: "local-host" } }));
+    harness.inspection.sdk.stub("files.read", async () => ({ content: "<button>Interactive</button>", contentEncoding: "utf8" }));
+    const result = await harness.behavior.runCli(["render", "chart.html", "--title", "Chart"], { threadId: "thread-1", cwd: "/workspace" });
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain('::inline-vis{source="thread-storage"');
+    expect(harness.inspection.sdk.callsTo("plugins.callRpc")).toHaveLength(0);
   });
   it("rejects unsupported height before writing", async () => {
     const harness = host();

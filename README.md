@@ -12,9 +12,7 @@ This is an independent BB integration, released under the [MIT license](LICENSE)
 
 ## Install
 
-This integration requires **Pinned Widgets**, a separate plugin we added to BB.
-It is not included in BB by default. Install and enable that plugin separately,
-then install T3 Visualizations:
+Install T3 Visualizations directly:
 
 ```sh
 bb plugin install https://github.com/ShamanicArts/bb-plugin-t3-visualizations
@@ -32,8 +30,8 @@ Write a self-contained HTML page in the current BB thread's workspace, then:
 bb t3-visualizations render chart.html --title "Model usage" --height 640
 ```
 
-Emit the returned `::widget` directive in an assistant reply. Use the widget's
-**Pin to bar** control, or add `--pin` to keep it above the composer.
+Emit the returned `::inline-vis` directive in an assistant reply. It uses BB's
+existing inline preview and works without Pinned Widgets.
 Heights range from 120 to 1200 pixels; the default is 640.
 
 Use BB's CSS theme variables, including `--background`, `--foreground`,
@@ -42,6 +40,15 @@ The page follows live theme changes without resetting its interaction state.
 Embed local images as data URLs and keep the HTML under 512,000 characters.
 See [the authoring skill](skills/t3-visualizations/SKILL.md) and
 [the interactive waves example](examples/waves.html).
+
+## Optional pinning
+
+This plugin also works alongside
+[Pinned Widgets](https://github.com/ShamanicArts/bb-plugin-pinned-widgets), a
+separate plugin, when you want a visualization above the composer. With that
+plugin installed, add `--pin` to the render command. The same file is published
+inline and pinned. If pinning is unavailable, the inline visualization still
+works. Pinned Widgets is not a dependency of T3 Visualizations.
 
 ## Develop
 
@@ -76,7 +83,8 @@ default palette subset, and relevant tests from
 
 The BB adaptation supplies styling and authoring guidance, a theme request
 handshake, a native agent tool, and a CLI. It uses BB's existing HTML capability
-and thread storage, and the separately installed Pinned Widgets plugin's widget
-controls. See [NOTICE.md](NOTICE.md) for exact
+and thread storage. Optional pinning integrates with the separate
+[Pinned Widgets plugin](https://github.com/ShamanicArts/bb-plugin-pinned-widgets).
+See [NOTICE.md](NOTICE.md) for exact
 source attribution. The upstream copyright and MIT permission notice are
 retained in [LICENSE](LICENSE).
