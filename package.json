@@ -1,0 +1,49 @@
+{
+  "name": "bb-plugin-t3-visualizations",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "bb": ">=0.44",
+    "bbPluginSdk": ">=0.5.29"
+  },
+  "bb": {
+    "name": "T3 Visualizations",
+    "description": "T3-style themed HTML visualizations using BB inline widgets and pins.",
+    "branding": {
+      "icon": "ChartNoAxesCombined"
+    },
+    "server": "./server.ts",
+    "app": "./app.tsx"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@get-bb/plugin-sdk": "0.5.29",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "better-sqlite3": "^12.0.0",
+    "cron-parser": "^5.5.0",
+    "hono": "^4.11.9",
+    "jsdom": "^29.1.1",
+    "playwright-core": "^1.63.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.11"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build": "bb plugin build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShamanicArts/bb-plugin-t3-visualizations.git"
+  },
+  "homepage": "https://github.com/ShamanicArts/bb-plugin-t3-visualizations#readme",
+  "bugs": {
+    "url": "https://github.com/ShamanicArts/bb-plugin-t3-visualizations/issues"
+  }
+}

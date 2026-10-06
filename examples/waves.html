@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Interactive waves</title>
+<style>
+*{box-sizing:border-box}main{padding:16px 0}h2{font-size:18px;margin:0 0 6px}p{color:var(--muted-foreground);margin:0 0 20px;font-size:13px}.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center}label{display:grid;gap:6px;font-size:12px;flex:1;min-width:130px}input{width:100%;accent-color:var(--primary)}button{background:var(--secondary);color:var(--foreground);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--ring);outline-offset:3px}svg{display:block;width:100%;height:210px;margin:16px 0;border-bottom:1px solid var(--border)}.caption{display:flex;gap:12px;font-family:var(--font-mono);font-size:12px;color:var(--muted-foreground)}.dot{color:var(--chart-2)}@media(prefers-reduced-motion:reduce){.motion-note{display:none}}
+</style></head><body><main>
+<h2>Two waves, one conversation</h2>
+<p>Change frequency and amplitude. Resize this widget, expand it, or pin the same page above the composer.</p>
+<div class="controls"><label>Frequency <output id="frequencyValue">2.0</output><input id="frequency" aria-label="Frequency" type="range" min="1" max="8" step="0.1" value="2"></label><label>Amplitude <output id="amplitudeValue">55</output><input id="amplitude" aria-label="Amplitude" type="range" min="10" max="85" value="55"></label><button id="toggle" aria-pressed="false">Pause</button></div>
+<svg viewBox="0 0 728 210" preserveAspectRatio="none" aria-label="Two animated sine waves" role="img"><path d="M0 105H728" stroke="var(--border)"/><path id="first" fill="none" stroke="var(--chart-1)" stroke-width="3"/><path id="second" fill="none" stroke="var(--chart-2)" stroke-width="2"/></svg>
+<div class="caption"><span>sin(x + t)</span><span class="dot">sin(1.5x − t)</span></div>
+</main><script>
+const frequency=document.getElementById('frequency'), amplitude=document.getElementById('amplitude'), toggle=document.getElementById('toggle');
+let running=!matchMedia('(prefers-reduced-motion: reduce)').matches, phase=0, last;
+const update=()=>{document.getElementById('frequencyValue').textContent=Number(frequency.value).toFixed(1);document.getElementById('amplitudeValue').textContent=amplitude.value;draw()};
+function draw(){const f=Number(frequency.value),a=Number(amplitude.value);for(const [id,m,d] of [['first',1,1],['second',1.5,-1]]){let p='';for(let x=0;x<=728;x+=4){const y=105-a*Math.sin(x/728*Math.PI*2*f*m+phase*d);p+=(x?'L':'M')+x+','+y.toFixed(2)}document.getElementById(id).setAttribute('d',p)}}
+function frame(now){if(running)phase+=Math.min((now-(last??now))/1000,0.1)*1.5;last=now;draw();requestAnimationFrame(frame)}
+function state(){toggle.textContent=running?'Pause':'Play';toggle.setAttribute('aria-pressed',String(!running))}
+toggle.onclick=()=>{running=!running;state()};frequency.oninput=amplitude.oninput=update;state();update();requestAnimationFrame(frame);
+</script></body></html>
